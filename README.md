@@ -10,7 +10,7 @@
 >    - MySQL 데이터 베이스를 활용한 게시판 개발
 >
 >* boardapi
->    - restful api를 활용한 게시판 개발
+>    - api를 활용한 게시판 개발
 >
 >* boardapi_server
->    - restful api 서버
+>    - api 서버
