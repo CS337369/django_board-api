@@ -15,6 +15,9 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 
 
+# from requests.api import request
+
+
 
 # class BoardViewSet(viewsets.ModelViewSet):
 #     queryset = Board.objects.all()
@@ -25,22 +28,52 @@ from rest_framework.decorators import api_view
 #     # "post": "create",
 # })
 
-class BoardListView(ListAPIView):
+# class BoardListView(ListAPIView):
+    # lookup_field = 'no'
+    # queryset = Board.objects.all().order_by('-b_no')
+    # serializer_class = BoardSerializer
+
+# @csrf_exempt
+# @method_decorator(csrf_exempt, name='dispatch')
+# class BoardCreateView(CreateAPIView):
+    # queryset = Board.objects.all()
+    # serializer_class = BoardCreateSerializer
+
+
+class BoardListCreateAPIView(generics.ListCreateAPIView):
     # lookup_field = 'no'
     queryset = Board.objects.all().order_by('-b_no')
     serializer_class = BoardSerializer
 
+
+# class BoardDetailView(RetrieveAPIView):
+#     queryset = Board.objects.all()
+#     serializer_class = BoardDetailSerializer
+
+#     def get(self, request, *args, **kwargs):
+#         pk = self.kwargs['pk']
+#         Board.objects.filter(pk=pk).update(b_count=F('b_count') + 1)
+#         return super().get(request, *args, **kwargs)
+
+#     def get_context_data(self, **kwargs):
+#         context_data = super().get_context_data(**kwargs)
+#         return context_data
+
 # @csrf_exempt
-# @method_decorator(csrf_exempt, name='dispatch')
-class BoardCreateView(CreateAPIView):
+# class BoardUpdateView(UpdateAPIView):
+#     queryset = Board.objects.all()
+#     serializer_class = BoardUpdateSerializer
+
+
+# @csrf_exempt
+# class BoardDeleteView(DestroyAPIView):
+#     queryset = Board.objects.all()
+#     serializer_class = BoardSerializer
+
+class BoardView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Board.objects.all()
-    serializer_class = BoardCreateSerializer
-
-
-class BoardDetailView(RetrieveAPIView):
-    queryset = Board.objects.all()
-    serializer_class = BoardDetailSerializer
-
+    serializer_class = BoardSerializer
+    
     def get(self, request, *args, **kwargs):
         pk = self.kwargs['pk']
         Board.objects.filter(pk=pk).update(b_count=F('b_count') + 1)
@@ -50,28 +83,17 @@ class BoardDetailView(RetrieveAPIView):
         context_data = super().get_context_data(**kwargs)
         return context_data
 
-# @csrf_exempt
-class BoardUpdateView(UpdateAPIView):
-    queryset = Board.objects.all()
-    serializer_class = BoardUpdateSerializer
-
-
-# @csrf_exempt
-class BoardDeleteView(DestroyAPIView):
-    queryset = Board.objects.all()
-    serializer_class = BoardSerializer
-
 ############################### Comment ##################################
 
-class CommentListView(ListAPIView):
-    model = Comment
-    queryset = Comment.objects.all().order_by('-id')
+# class CommentListView(ListAPIView):
+#     model = Comment
+#     queryset = Comment.objects.all().order_by('-id')
 
-    def get(self, request, board_pk):
-        board = get_object_or_404(Board, pk=board_pk)
-        comments = board.comments.all()
-        serializer = CommentListSerializer(comments, many=True)
-        return Response(serializer.data)
+#     def get(self, request, board_pk):
+#         board = get_object_or_404(Board, pk=board_pk)
+#         comments = board.comments.all()
+#         serializer = CommentListSerializer(comments, many=True)
+#         return Response(serializer.data)
 
 
 class CommentListCreateView(generics.ListCreateAPIView):
@@ -95,18 +117,18 @@ class CommentListCreateView(generics.ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class CommentCreateView(CreateAPIView):
-    model = Comment
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+# class CommentCreateView(CreateAPIView):
+#     model = Comment
+#     queryset = Comment.objects.all()
+#     serializer_class = CommentSerializer
 
-    def post(self, request, board_pk):
-        board = get_object_or_404(Board, pk=board_pk)
-        serializer = CommentSerializer(data=request.data) 
+#     def post(self, request, board_pk):
+#         board = get_object_or_404(Board, pk=board_pk)
+#         serializer = CommentSerializer(data=request.data) 
         
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(Board=board)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         if serializer.is_valid(raise_exception=True):
+#             serializer.save(Board=board)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class CommentUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):

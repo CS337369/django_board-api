@@ -113,7 +113,7 @@ class Boardapi_update(generic.UpdateView):
             'b_note' : request.POST.get('b_note')
         }
 
-        url = 'http://127.0.0.1:8080/boardapi/' + str(datas['pk']) + '/update/'
+        url = 'http://127.0.0.1:8080/boardapi/' + str(datas['pk']) + '/'
         c_update = requests.put(url, data=datas)
 
         return redirect(reverse('board_detail', kwargs={'pk': self.kwargs['pk']}))
@@ -137,7 +137,7 @@ class Boardapi_delete(generic.DeleteView):
             'pk': self.kwargs['pk']
         }
 
-        url = 'http://127.0.0.1:8080/boardapi/' + str(data['pk']) + '/delete/'
+        url = 'http://127.0.0.1:8080/boardapi/' + str(data['pk']) + '/'
         b_del = requests.delete(url, params=data)
 
         return redirect(reverse('board'))
@@ -168,7 +168,7 @@ class Commentapi_delete(generic.DeleteView):
             'id': self.kwargs['id']
         }
 
-        url = 'http://127.0.0.1:8080/boardapi/' + str(datas['pk']) + '/comment/' + str(datas['id']) + '/delete/'
+        url = 'http://127.0.0.1:8080/boardapi/' + str(datas['pk']) + '/comment/' + str(datas['id']) + '/'
         c_delete = requests.delete(url, params=datas)
 
         return redirect(reverse('board_detail', kwargs={'pk': self.kwargs['pk']}))
@@ -181,7 +181,7 @@ class Commentapi_update(generic.UpdateView):
             'id': self.kwargs['id']
         }
 
-        url = 'http://127.0.0.1:8080/boardapi/' + str(data['pk']) + '/comment/' + str(data['id']) + '/update/'
+        url = 'http://127.0.0.1:8080/boardapi/' + str(data['pk']) + '/comment/'
         cdatas = requests.get(url, params=data).json()
 
         cdf = pd.DataFrame(cdatas, index=[0])
@@ -199,7 +199,7 @@ class Commentapi_update(generic.UpdateView):
             'c_note' : request.POST.get('c_note')
         }
 
-        url = 'http://127.0.0.1:8080/boardapi/' + str(datas['pk']) + '/comment/' + str(datas['id']) + '/update/'
+        url = 'http://127.0.0.1:8080/boardapi/' + str(datas['pk']) + '/comment/' + str(datas['id']) + '/'
         c_update = requests.put(url, data=datas)
 
         return redirect(reverse('board_detail', kwargs={'pk': self.kwargs['pk']}))
