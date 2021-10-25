@@ -1,0 +1,34 @@
+{% load static %}
+{% block body %}
+
+{% comment %} {% if not comment_list %}
+    <p class="text-center">댓글이 없습니다! </p>
+{% endif %} {% endcomment %}
+
+<div style="margin:20px 0;">
+    {% for i in board_detail %}
+    <!-- <table width="100%" cellpadding="0" cellspacing="0">
+        <tbody>
+            <tr style="background-color:#f1eee3;height:45px;border-top: 1px solid #333;">
+                <td style="padding-left: 10px;border-top: 1px solid #eee;width: 114px;" align="center" width="20%">{{ i.1 }}</td>
+                <td style="vertical-align: top;border-top: 1px solid #eee;padding: 10px 0;" align="left" width="70%">{{ i.2 }}
+                    <span style="color: #999;font-size: 11px;display: block;">{{ i.3 }}</span>
+                </td>
+                {% comment %} <form action="{% url 'comment_delete' pk=cdatas.pk pk=cdatas.id %} method='POST'"> {% endcomment %}
+                <form method='POST'>
+                {% csrf_token %}
+                    <td style="vertical-align: top;border-top: 1px solid #eee;padding: 10px 0;padding-right: 5px;" align="right" width="10%">
+                        <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right:10px;">삭제</button>
+                        {% comment %} <a href="comment/{{ i.4 }}/delete/">삭제</a> {% endcomment %}
+                    </td>
+                </form>
+            </tr>
+            {% comment %} {% if user.username == i.c_writer or user.is_staff %} {% endcomment %}
+                {% comment %} <a href="" class="btn btn-outline-success">삭제</a> {% endcomment %}
+            {% comment %} {% endif %} {% endcomment %}
+        </tbody> 
+    </table> -->
+    {% endfor %}
+</div>
+{% comment %} {% include 'comment_write.html' %} {% endcomment %}
+{% endblock %}

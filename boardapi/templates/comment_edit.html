@@ -1,0 +1,20 @@
+{% load static %}
+{% block body %}
+{% for i in comment_list %}
+<div>
+    <form method='POST'>
+    {% csrf_token %}
+        <table width="100%" cellpadding="0" cellspacing="0">
+            <tr style="height:45px;border-top:solid 1px #dddddd;">
+                <td width="20%" align="left" style="vertical-align: top; padding-top: 10px;"><textarea name="c_writer" rows="1">{{ i.2 }}</textarea></td>
+                <td width="80%" align="left" style="vertical-align: top; padding-top: 10px;"><textarea name="c_note" rows="4">{{ i.3 }}</textarea></td>
+            </tr>
+        </table>
+        <div>
+            <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right:10px;">수정</button>
+        </div>
+    </form>
+</div>
+{% endfor %}
+
+{% endblock %}

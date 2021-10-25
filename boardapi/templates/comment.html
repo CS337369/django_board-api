@@ -1,0 +1,60 @@
+{% load static %}
+{% block body %}
+{% block extra_script %}
+	<!-- jQuery CDN -->
+	<script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript">
+		function answerEdit(answer_idx, awriter, acontent, qna_idx){
+			$('#acontent'+answer_idx).html(
+				"<textarea id='edit_acontent"+answer_idx+"'>"+acontent+"</textarea>"
+				+"<style>#edit_acontent"+answer_idx+"{width:740px; height:80px; resize:none;} </style>"
+			);
+			
+			$('#abt'+answer_idx).html(
+				"<a onclick='answerEditSave("+answer_idx+","+qna_idx+")' id='btnEdit'>완료</a> "
+				+"<a onclick='location.href='qnaDetail.do?idx="+qna_idx+"' id='btnCancel'>취소</a>"
+			);
+		}
+
+		function answerEditSave(answer_idx, qna_idx){
+			var acontent = $("#edit_acontent"+answer_idx).val();
+			location.href='answerEdit.do?idx='+answer_idx+"&acontent="+acontent;
+		}
+	</script>
+{% endblock %}
+
+{% if not comment_list %}
+    <p class="text-center">댓글이 없습니다! </p>
+{% endif %}
+
+<div style="margin:20px 0;">
+    {% for i in comment_list %}
+    <table width="100%" cellpadding="0" cellspacing="0">
+        <tbody>
+            <tr style="background-color:#f1eee3;height:45px;border-top: 1px solid #333;">
+                <td style="padding-left: 10px;border-top: 1px solid #eee;width: 114px;" align="center" width="20%">{{ i.1 }}</td>
+                <td style="vertical-align: top;border-top: 1px solid #eee;padding: 10px 0;" align="left" width="70%">{{ i.2 }}
+                    <span style="color: #999;font-size: 11px;display: block;">{{ i.3 }}</span>
+                </td>
+                <form action="{% url 'comment_update' pk=i.0 id=i.4 %}">
+                    <td style="vertical-align: top;border-top: 1px solid #eee;padding: 10px 0;padding-right: 5px;" align="right" width="10%">
+                        <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right:10px;">수정</button>
+                    </td>
+                </form>
+                <form action="{% url 'comment_delete' pk=i.0 id=i.4 %}" method='POST'>
+                <form method='POST'>
+                {% csrf_token %}
+                    <td style="vertical-align: top;border-top: 1px solid #eee;padding: 10px 0;padding-right: 5px;" align="right" width="10%">
+                        <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right:10px;">삭제</button>
+                    </td>
+                </form>
+            </tr>
+            {% if user.username == i.1 or user.is_staff %}
+                <a href="" class="btn btn-outline-success">삭제</a>
+            {% endif %}
+        </tbody>
+    </table>
+    {% endfor %}
+</div>
+{% include 'comment_write.html' %}
+{% endblock %}
