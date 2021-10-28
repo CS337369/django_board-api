@@ -39,7 +39,7 @@ from rest_framework.decorators import api_view
     # queryset = Board.objects.all()
     # serializer_class = BoardCreateSerializer
 
-
+# @csrf_exempt
 class BoardListCreateAPIView(generics.ListCreateAPIView):
     # lookup_field = 'no'
     queryset = Board.objects.all().order_by('-b_no')

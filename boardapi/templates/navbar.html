@@ -14,15 +14,18 @@
         <li>
             <a href="/board">Board</a>
         </li>
+        <li>
+            <a href="{% url 'login' %}">로그인</a>
+        </li>
     </ul>
     <div>
         {% comment %} {% if user.is_authenticated %} {% endcomment %}
-        <form action="{% url 'logout' %}" method="post">
+        {% comment %} <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
-            <li class="get-started"><button class="hidden"><a>로그아웃</a></button>
+            <li class="get-started"><button class="hidden"><a>로그아웃</a></button> {% endcomment %}
         </form>
         {% comment %} {% else %} {% endcomment %}
-            <li class="get-started"><a href="{% url 'login' %}">로그인</a></li>
+            {% comment %} <li class="get-started"><a href="{% url 'login' %}">로그인</a></li> {% endcomment %}
             {% comment %} <li class="get-started"><a href="{% url 'test2' %}">테스트</a></li> {% endcomment %}
         {% comment %} {% endif %} {% endcomment %}
     </div>

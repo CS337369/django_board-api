@@ -86,7 +86,7 @@ class Boardapi_insert(generic.CreateView):
             'b_note' : request.POST.get('b_note'),
         }
 
-        url = 'http://localhost:8080/boardapi/create/'
+        url = 'http://localhost:8080/boardapi/'
         bcreate = requests.post(url, data=datas)
 
         return redirect(reverse('board'))
