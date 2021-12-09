@@ -1,5 +1,11 @@
-from django.shortcuts import redirect, render
-from .models import Board
+from re import template
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic.edit import CreateView, DeleteView
+from django.views.generic.list import ListView
+from django.urls import reverse
+
+# from boardapi.board.models import Comment
+from .models import Board, Comment
 from django.db.models import ObjectDoesNotExist
 
 import json
@@ -65,43 +71,54 @@ class board_insert(generic.CreateView):
         else:
             return redirect('/board_write')
 
-# def board_insert(request):
-#     btitle = request.GET['b_title']
-#     bnote = request.GET['b_note']
-#     bwriter = request.GET['b_writer']
 
-#     if btitle != "":
-#         rows = Board.objects.create(b_title=btitle, b_note=bnote, b_writer=bwriter)
-#         return redirect('/board')
-#     else:
-#         return redirect('/board_write')
+# class board_detail(generic.DetailView):
+#     def get(self, request, *args, **kwargs):
+#         pk = self.kwargs['pk']
+#         rsDetail = Board.objects.filter(b_no=pk)
 
+#         rsData = Board.objects.get(b_no=pk)
+#         rsData.b_count += 1
+#         rsData.save()
 
-class board_view(generic.DetailView):
-    def get(self, request):
-        bno = request.GET['b_no']
-        rsDetail = Board.objects.filter(b_no=bno)
+#         return render(request, "board_detail.html", {
+#             'rsDetail': rsDetail
+#         })
 
-        rsData = Board.objects.get(b_no=bno)
+class board_detail(generic.DetailView):
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs['pk']
+        rsDetail = Board.objects.filter(b_no=pk)
+
+        rsData = Board.objects.get(b_no=pk)
         rsData.b_count += 1
         rsData.save()
+        
+        comment_list = Comment.objects.all().order_by('-id')
 
-        return render(request, "board_view.html", {
-            'rsDetail': rsDetail
+        return render(request, "board_detail.html", {
+            'rsDetail': rsDetail,
+            'comment_list' : comment_list
         })
+        
+    def post(self, request, *args, **kwargs):
+        # bno = request.GET['b_no']
+        bno = get_object_or_404(Board, b_no=self.kwargs['pk'])
+        # bno = Board.objects.get(self.b_no)
+        # bno2 = Board.objects.filter(Board, pk=pk)
+        # data = json.loads(request.body.decode('utf-8'))
+        # bno    = Board.objects.get(id=data['Board_id'])
+        cnote = request.POST.get('c_note')
+        cwriter = request.POST.get('c_writer')
+        
+        # rows = Comment.objects.create(Board=bno ,c_note=cnote, c_writer=cwriter)
+        rows = Comment.objects.create(
+            Board   = bno,
+            c_note  = cnote,
+            c_writer    = cwriter
+        )
 
-
-# def board_view(request):
-#     bno = request.GET['b_no']
-#     rsDetail = Board.objects.filter(b_no=bno)
-
-#     rsData = Board.objects.get(b_no=bno)
-#     rsData.b_count += 1
-#     rsData.save()
-
-#     return render(request, "board_view.html", {
-#         'rsDetail': rsDetail
-#     })
+        return redirect(reverse('board_detail', kwargs={'pk': self.kwargs['pk']}))
 
 def board_edit(request):
     bno = request.GET['b_no']
@@ -162,6 +179,14 @@ def board_deleteajax(request):
     context['result_msg'] = 'Deleted...'
 
     return JsonResponse(context, content_type="application/json")
+
+
+########### Comment #############
+
+class comment_delete(DeleteView):
+    pass
+
+
 
 ########################################################################
 ###                         api                                      ###

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'js/home.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+        <!-- ======= Services Section ======= -->
+        <section id="services" class="services">
+          <div class="container">
+                {% comment %} <form method="POST" action="{% url 'comment_insert' %}" id="frmBoard"> {% endcomment %}
+                <form method="POST" id="frmBoard">
+                {% csrf_token %}
+                {% if user.is_authenticated %}
+                            <td width="80%" align="left"><input type="hidden" value={{ user.get_username }} name="c_writer"></td>
+                {% endif %}                            
+                        <tr style="height:45px;border-top:solid 1px #dddddd;">
+                            <td width="80%" align="left"><textarea name="c_note" style="width:100%;" rows="4"></textarea></td>
+                        </tr>
+                        <tr style="height:45px;border-top:solid 1px #dddddd;" align="center">
+                            <td width="100%" colspan="2">
+                                <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right:10px; float: right;"
+                                onclick="javascript:document.getElementById('frmBoard').submit();">댓글 저장</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+          </div>
+        </section><!-- End Services Section -->
+    </main><!-- End #main -->
+{% endblock %}

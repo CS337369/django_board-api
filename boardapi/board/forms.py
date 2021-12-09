@@ -37,17 +37,3 @@ class UserRegisterForm(UserCreationForm):
         validators = [validate_password],
         min_length= 8
     )
-
-
-
-
-
-# class RegisterForm(forms.Form):
-#     username = forms.CharField(
-#         max_length=20,
-#         min_length=3,
-#     )
-#     email = forms.EmailField
-#     password1 = forms.CharField(write_only=True)
-#     password2 = forms.CharField(write_only=True)
-

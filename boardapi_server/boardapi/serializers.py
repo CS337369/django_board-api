@@ -17,11 +17,6 @@ class CommentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return Comment.objects.create(**validated_data)
 
-# class CommentCreateSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Comment
-#         fields = ['Board', 'id', 'c_writer', 'c_note']
-
 
 class CommentListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -58,12 +53,3 @@ class BoardDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
         fields = ['b_no', 'b_title', 'b_note', 'b_writer', 'b_date', 'comments']
-
-
-############### account ##############
-
-
-class SignupSerializer(serializers.ModelSerializer):    
-    class Meta:
-        model = Account
-        fields = ['id', 'pw1', 'pw2']

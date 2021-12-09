@@ -48,7 +48,7 @@
             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr style="border-top:solid 1px #dddddd;">
                     <td width="8%" align="center">{{ i.b_no }} </td>
-                    <td width="42%" align="left"><a href="/board_view?b_no={{ i.b_no }}">{{ i.b_title }}</a></td>
+                    <td width="42%" align="left"><a href="{{ i.b_no }}">{{ i.b_title }}</a></td>
                     <td width="10%" align="center">{{ i.b_writer }} </td>
                     <td width="20%" align="center">{{ i.b_date | date:"y-m-d" }} </td>
                     <td width="8%" align="center">{{ i.b_count }} </td>

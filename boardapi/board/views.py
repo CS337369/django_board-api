@@ -277,7 +277,6 @@ class SignupView(generic.CreateView):
                 return redirect(reverse('signup'))
             elif signup.status_code == 200 or 201:
                 messages.add_message(self.request, messages.SUCCESS, 'Success')
-                # return redirect(reverse('login'))
                 return redirect(reverse('login'))
             else:
                 return HttpResponse('Unknown Error Occurred')
@@ -290,68 +289,3 @@ class SignupView(generic.CreateView):
 
 
 ############# test ##################
-
-# class xptmxm(generic.DeleteView):
-#     def get(self, request, *args, **kwargs):
-#         datas = {
-#             'pk': self.kwargs['pk'],
-#         }
-
-#         url = 'http://127.0.0.1:8080/boardapi/'+str(datas['pk'])+'/'
-
-#         bdetail = requests.get(url, params=datas).json()
-
-#         c_url = 'http://127.0.0.1:8080/boardapi/'  + str(datas['pk']) + '/comment/'
-#         cdatas = requests.get(c_url, params=datas).json()
-
-#         print(cdatas)
-
-#         cdf = pd.DataFrame(cdatas)
-
-#         clist = [tuple(r) for r in cdf.to_numpy()]
-
-#         return render(self.request, 'boardapi_view.html', {
-#             "board_detail" : bdetail,
-#             "comment_list" : clist
-#             })
-
-#     def post(self, request, *args, **kwargs):
-#         datas = {
-#             'pk': self.kwargs['pk'],
-#         }
-
-#         url = 'http://127.0.0.1:8080/boardapi/' + str(datas['pk']) + '/comment/' + str(datas['pk']) + '/delete/'
-#         c_delete = requests.delete(url, params=datas)
-
-#         print(datas)
-#         print(c_delete)
-
-#         return redirect(reverse('board_detail', kwargs={'pk': self.kwargs['pk']}))
-    
-
-# class test2(generic.DeleteView):
-#     def get(self, request, *args, **kwargs):
-#         data ={
-#             'pk': self.kwargs['pk']
-#         }
-
-#         url = 'http://127.0.0.1:8080/boardapi/' + str(data['pk']) + '/comment/'
-#         c_get = requests.get(url, params=data).json()
-
-#         return render(self.reqeust, 'test2.html', {
-#             'comment_list': c_get
-#         })
-
-#     def post(self, request, *args, **kwargs):
-#         datas = {
-#             'pk': self.kwargs['pk']
-#         }
-
-#         url = 'http://127.0.0.1:8080/boardapi/' + str(datas['pk']) + '/comment/' + str(datas['id']) + '/delete/'
-#         c_delete = requests.delete(url, params=datas)
-
-#         print(datas)
-#         print(c_delete)
-
-#         return redirect(reverse('board_detail', kwargs={'pk': self.kwargs['pk']}))
-    
