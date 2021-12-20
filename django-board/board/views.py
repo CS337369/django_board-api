@@ -1,6 +1,9 @@
 from re import template
+from django.db.models.query import QuerySet
+from django.forms import forms
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic.edit import CreateView, DeleteView
+from django.urls.base import reverse_lazy
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
 from django.urls import reverse
 
@@ -29,20 +32,14 @@ class board(generic.ListView):
             'rsBoard': rsBoard
         })
 
-# @login_required
-# def board(request):
-#     rsBoard = Board.objects.all().order_by('-b_date')
-
-#     return render(request, 'board_list.html', {
-#         'rsBoard': rsBoard
-#     })
-
 
 def board_write(request):
     return render(request, 'board_write.html', )
 
+
 def board_writeajax(request):
     return render(request, 'board_writeajax.html', )
+
 
 def board_insertajax(request):
     btitle = request.GET['b_title']
@@ -72,19 +69,6 @@ class board_insert(generic.CreateView):
             return redirect('/board_write')
 
 
-# class board_detail(generic.DetailView):
-#     def get(self, request, *args, **kwargs):
-#         pk = self.kwargs['pk']
-#         rsDetail = Board.objects.filter(b_no=pk)
-
-#         rsData = Board.objects.get(b_no=pk)
-#         rsData.b_count += 1
-#         rsData.save()
-
-#         return render(request, "board_detail.html", {
-#             'rsDetail': rsDetail
-#         })
-
 class board_detail(generic.DetailView):
     def get(self, request, *args, **kwargs):
         pk = self.kwargs['pk']
@@ -94,7 +78,7 @@ class board_detail(generic.DetailView):
         rsData.b_count += 1
         rsData.save()
         
-        comment_list = Comment.objects.all().order_by('-id')
+        comment_list = Comment.objects.filter(Board_id=pk).order_by('-id')
 
         return render(request, "board_detail.html", {
             'rsDetail': rsDetail,
@@ -102,16 +86,10 @@ class board_detail(generic.DetailView):
         })
         
     def post(self, request, *args, **kwargs):
-        # bno = request.GET['b_no']
         bno = get_object_or_404(Board, b_no=self.kwargs['pk'])
-        # bno = Board.objects.get(self.b_no)
-        # bno2 = Board.objects.filter(Board, pk=pk)
-        # data = json.loads(request.body.decode('utf-8'))
-        # bno    = Board.objects.get(id=data['Board_id'])
         cnote = request.POST.get('c_note')
         cwriter = request.POST.get('c_writer')
         
-        # rows = Comment.objects.create(Board=bno ,c_note=cnote, c_writer=cwriter)
         rows = Comment.objects.create(
             Board   = bno,
             c_note  = cnote,
@@ -153,11 +131,13 @@ def board_update(request):
     except ObjectDoesNotExist:
         return HttpResponse({"success": False, "msg": "게시글 없음"})
 
+
 def board_delete(request):
     bno = request.GET['b_no']
     rows = Board.objects.get(b_no=bno).delete()
 
     return redirect('/board')
+
 
 # @login_required
 def board_ajax(request):
@@ -183,13 +163,36 @@ def board_deleteajax(request):
 
 ########### Comment #############
 
+# import logging
+# logger = logging.getLogger(__name__)
+
+class comment_update(UpdateView):
+    model = Comment
+    fields = 'c_note',
+    template_name = 'comment_edit.html'
+    context_object_name = 'com'
+    
+    # def form_invalid(self, form):
+    #     # debugging
+    #     logger.debug('invalid form', form.errors)
+    #     return form
+    
+    def get_success_url(self):
+        return reverse('board_detail', kwargs={'pk':self.object.Board.pk})
+    
+    ######## = form.as_p를 사용해야만 동작함 comment_edit.html을 만져도 안됨.. 왜지
+    
+
 class comment_delete(DeleteView):
-    pass
-
-
+    model = Comment
+    success_url = reverse_lazy('board')
+    
+    def get_success_url(self):
+        return reverse('board_detail', kwargs={'pk':self.object.Board.pk})
+        
 
 ########################################################################
-###                         api                                      ###
+###                             api                                  ###
 ########################################################################
 
 # @login_required

@@ -1,0 +1,16 @@
+{% load static %}
+{% block body %}
+
+<div>
+    <form method='POST'>
+    {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <button class="btn btn-outline-success my-2 my-sm-0" style="margin-left:118px;">수정</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+
+

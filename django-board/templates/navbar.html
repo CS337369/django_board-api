@@ -14,9 +14,9 @@
         <li class="active"><a href="/">Home</a></li>
         <li><a href="board">Board</a></li>
         {% if user.is_authenticated %}
-            <li class="get-started"><a href="accounts/logout">로그아웃</a></li>
+            <li class="get-started"><a href="/accounts/logout">로그아웃</a></li>
         {% else %}
-            <li class="get-started"><a href="accounts/login">로그인</a></li>
+            <li class="get-started"><a href="/accounts/login">로그인</a></li>
         {% endif %}
     </ul>
     </nav><!-- .nav-menu -->

@@ -13,5 +13,10 @@ urlpatterns = [
     path('board_delete/', views.board_delete, name="board_delete"),
 
     ####### comment #########
-    path('board/comment/', views.comment_insert.as_view(), name="comment_insert"),
+    path('board/comment/<int:pk>/update/', views.comment_update.as_view(), name="comment_update"),
+    path('board/comment/<int:pk>/delete/', views.comment_delete.as_view(), name="comment_delete"),
+    # path('board/<int:pk>/comment/<int:id>/delete/', views.comment_delete.as_view(), name="comment_delete"),
+    # path('board/<int:Board_id>/comment/<int:id>/delete/', views.comment_delete.as_view(), name="comment_delete"),
+    # path('board/<int:pk>/comment/<int:id>/update/', views.comment_update, name="comment_update"),
+    # path('board/comment/delete/', views.comment_delete, name="comment_delete"),
 ]

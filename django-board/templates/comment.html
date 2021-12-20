@@ -11,22 +11,22 @@
                 <td style="vertical-align: top;border-top: 1px solid #eee;padding: 10px 0;" align="left" width="70%">{{ i.c_note }}
                     <span style="color: #999;font-size: 11px;display: block;">{{ i.c_date }}</span>
                 </td>
-                {% comment %} <form action="{% url 'comment_update' pk=i.0 id=i.4 %}">
-                    <td style="vertical-align: top;border-top: 1px solid #eee;padding: 10px 0;padding-right: 5px;" align="right" width="10%">
-                        <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right:10px;">수정</button>
+                {% if user.username == i.b_writer or user.is_staff %}
+                <form action="{% url 'comment_update' i.id %}">
+                    <td style="vertical-align: top;border-top: 1px solid #eee;padding: 10px 0;" align="right" width="10%">
+                        <button class="btn btn-outline-success my-2 my-sm-0">수정</button>
                     </td>
                 </form>
-                <form action="{% url 'comment_delete' pk=i.0 id=i.4 %}" method='POST'></form> {% endcomment %}
-                <form method='POST'>
+                {% endif %}
+                {% if user.username == i.c_writer or user.is_staff %}
+                <form action="{% url 'comment_delete' i.id %}" method='POST'>
                 {% csrf_token %}
                     <td style="vertical-align: top;border-top: 1px solid #eee;padding: 10px 0;padding-right: 5px;" align="right" width="10%">
                         <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right:10px;">삭제</button>
                     </td>
                 </form>
+                {% endif %}
             </tr>
-            {% if user.username == user.is_staff %}
-                <a href="" class="btn btn-outline-success">삭제</a>
-            {% endif %}
         </tbody>
     </table>
     {% endfor %}
