@@ -9,6 +9,8 @@ from django.urls import reverse
 
 # from boardapi.board.models import Comment
 from .models import Board, Comment
+from .forms import BoardForm, CommentForm
+from django.views.decorators.http import require_http_methods
 from django.db.models import ObjectDoesNotExist
 
 import json
@@ -45,28 +47,60 @@ def board_insertajax(request):
     btitle = request.GET['b_title']
     bnote = request.GET['b_note']
     bwriter = request.GET['b_writer']
-
+                    
     if btitle != "":
         rows = Board.objects.create(b_title=btitle, b_note=bnote, b_writer=bwriter)
         return redirect('/board_ajax')
     else:
         return redirect('/board_writeajax')
 
+def board_write(request):
+    form = BoardForm()
+    return render(request, 'board_write.html', {
+        'form':form
+        })
 
-class board_insert(generic.CreateView):
-    model = Board
-    fields = '__all__'
-
-    def post(self, request):
-        btitle = request.POST.get('b_title')
-        bnote = request.POST.get('b_note')
-        bwriter = request.POST.get('b_writer')
-
-        if btitle != "":
-            rows = Board.objects.create(b_title=btitle, b_note=bnote, b_writer=bwriter)
+@require_http_methods(["POST"])
+def board_insert(request):
+    if request.method == "POST":
+        form = BoardForm(request.POST)
+        if form.is_valid():
+            form.save()
             return redirect('/board')
-        else:
-            return redirect('/board_write')
+    
+    else:
+        form = BoardForm()
+    return render(request, 'board_write.html', {'form':form})
+
+# class board_insert(generic.CreateView):
+#     def get(self, request):
+#         form = BoardForm()
+#         return render(self.reqeust, 'board_write.html', {'form':form})
+    
+#     def post(self, request):
+#         form = BoardForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('/board')
+        
+#         else:
+#             form = BoardForm()
+#         return render(request, 'board_write.html', {'form':form})
+
+# class board_insert(generic.CreateView):
+#     model = Board
+#     fields = '__all__'
+    
+#     def post(self, request):
+#         btitle = request.POST.get('b_title')
+#         bnote = request.POST.get('b_note')
+#         bwriter = request.POST.get('b_writer')
+
+#         if btitle != "":
+#             rows = Board.objects.create(b_title=btitle, b_note=bnote, b_writer=bwriter)
+#             return redirect('/board')
+#         else:
+#             return redirect('/board_write')
 
 
 class board_detail(generic.DetailView):
@@ -86,15 +120,26 @@ class board_detail(generic.DetailView):
         })
         
     def post(self, request, *args, **kwargs):
+        form = CommentForm(request.POST)
         bno = get_object_or_404(Board, b_no=self.kwargs['pk'])
         cnote = request.POST.get('c_note')
         cwriter = request.POST.get('c_writer')
         
-        rows = Comment.objects.create(
-            Board   = bno,
-            c_note  = cnote,
-            c_writer    = cwriter
-        )
+        if form.is_valid():
+            rows = Comment.objects.create(
+                Board   = bno,
+                c_note  = cnote,
+                c_writer    = cwriter
+            )
+            return redirect(reverse('board_detail', kwargs={'pk': self.kwargs['pk']}))
+        
+        else:
+            form = CommentForm()
+            
+            def get_context_data(self, **kwargs):
+                context = super().get_context_data(**kwargs)
+                context['form'] = form
+                return context
 
         return redirect(reverse('board_detail', kwargs={'pk': self.kwargs['pk']}))
 

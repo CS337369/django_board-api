@@ -27,6 +27,11 @@
                 </form>
                 {% endif %}
             </tr>
+            {% for field in form %}
+                {% if field.errors %}
+                    <span style="color: red;">{{ field.errors }}</span>
+                {% endif %} 
+            {% endfor %}
         </tbody>
     </table>
     {% endfor %}

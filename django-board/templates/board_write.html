@@ -34,33 +34,39 @@
 
             <div class="section-title" data-aos="fade-up">
                 <h3>게시판 등록</h3>
-
                 <form method="POST" action="/board_insert" id="frmBoard">
                 {% csrf_token %}
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tr style="height:45px;border-top:solid 1px #dddddd;">
-                            <td width="20%" align="center">제목</td>
-                            <td width="80%" align="left"><input type="input" placeholder="제 목" name="b_title" style="width:100%;"></td>
-                        </tr>
-                        <tr style="height:45px;border-top:solid 1px #dddddd;">
-                            <td width="20%" align="center">작성자</td>
-                            {% if user.is_authenticated %}
-                            <td width="80%" align="left"><input type="input" value={{ user.get_username }} name="b_writer"></td>
-                            {% else %}
-                            <td width="80%" align="left"><input type="input" placeholder="작성자" name="b_writer"></td>
-                            {% endif %}
-                        </tr>
-                        <tr style="height:45px;border-top:solid 1px #dddddd;">
-                            <td width="20%" align="center">내용</td>
-                            <td width="80%" align="left"><textarea name="b_note" style="width:100%;" rows="5"></textarea></td>
-                        </tr>
-                        <tr style="height:45px;border-top:solid 1px #dddddd;" align="center">
-                            <td width="100%" colspan="2">
-                                <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right:10px;" onclick="javascript:document.getElementById('frmBoard').submit();">저장</button>
-                                <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right:10px;" onclick="location.href='/board'">목록</button>
-                            </td>
-                        </tr>
-                    </table>
+                {% comment %} {% for field in form %} {% endcomment %}
+                {% comment %} <div class="form-group">
+                  <input type="{{field.field.widget.input_type}}" class="form-control" id="{{field.id_for_label}}" placeholder="{{field.label}}" name="{{field.name}}">
+                </div> {% endcomment %}
+                <div class="form-group">
+                  <input type="{{form.form.widget.input_type}}" class="form-control" id="{{form.id_for_label}}" placeholder="제목" name="b_title">
+                </div>
+                {% if user.is_authenticated %}
+                  <div class="form-group">
+                    <input type="{{form.form.widget.input_type}}" class="form-control" id="{{form.id_for_label}}" value={{ user.get_username }} name="b_writer">
+                  </div>
+                {% else %}
+                <div class="form-group">
+                  <input type="{{form.form.widget.input_type}}" class="form-control" id="{{form.id_for_label}}" value="비회원" name="b_writer">
+                </div>                
+                {% endif %}
+                <div class="form-group">
+                  <input type="{{form.form.widget.input_type}}" class="form-control" id="{{form.id_for_label}}" placeholder="내용" name="b_note" style="rows: 5;">
+                </div>
+                {% for field in form %}
+                {% if field.errors %}
+                  <span style="color: red;">{{ field.errors }}</span>
+                {% endif %}
+                {% endfor %}
+                {% comment %} {% endfor %} {% endcomment %}
+                <tr style="height:45px;border-top:solid 1px #dddddd;" align="center">
+                    <td width="100%" colspan="2">
+                        <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right:10px;" onclick="javascript:document.getElementById('frmBoard').submit();">저장</button>
+                        <a href="/board" class="btn btn-outline-success">목록</a>
+                    </td>
+                </tr>
                 </form>
 
             </div>
