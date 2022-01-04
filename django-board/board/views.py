@@ -54,6 +54,7 @@ def board_insertajax(request):
     else:
         return redirect('/board_writeajax')
 
+
 def board_write(request):
     form = BoardForm()
     return render(request, 'board_write.html', {
