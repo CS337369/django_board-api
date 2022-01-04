@@ -12,7 +12,7 @@
 >
 >* boardapi_server
 >    - REST api 서버
->    - HTTP 의 ruequst 이용한 CRUD 서비스도 가능
+>    - HTTP 의 request 이용한 CRUD 서비스도 가능
 >    - rest-auth를 통한 회원가입
 
 
